@@ -11,8 +11,16 @@ provider "aws" {
 
 # Initialising s3 bucket
 module "s3_bucket" {
-  source = "./modules/s3_bucket"
+  source        = "./modules/s3_bucket"
 
-  bucket_name = "santonastaso.me-test"
+  bucket_name   = var.bucket_name
 }
 
+module "pipeline" {
+  source        = "./modules/pipeline"
+
+  pipeline_name = var.bucket_name
+  origin_org    = var.origin_org
+  origin_repo   = var.origin_repo
+  origin_branch = var.origin_branch
+}
