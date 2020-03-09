@@ -1,6 +1,7 @@
 resource "aws_s3_bucket" "codepipeline_bucket" {
-  bucket = "${var.pipeline_name}-pipeline"
-  acl    = "private"
+    bucket = "${var.pipeline_name}-pipeline"
+    acl    = "private"
+    force_destroy = true
 }
 
 resource "aws_iam_role" "codepipeline_role" {
@@ -60,6 +61,12 @@ EOF
 #   name = "alias/myKmsKey"
 # }
 
+module "codebuild" {
+    source = "../codebuild"
+
+    codebuild_name = "santonastaso-project"
+}
+
 resource "aws_codepipeline" "codepipeline" {
   name     = var.pipeline_name
   role_arn = aws_iam_role.codepipeline_role.arn
@@ -106,7 +113,7 @@ resource "aws_codepipeline" "codepipeline" {
       version          = "1"
 
       configuration = {
-        ProjectName = "test"
+        ProjectName = module.codebuild.codebuild_name
       }
     }
   }
