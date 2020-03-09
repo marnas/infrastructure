@@ -1,7 +1,7 @@
 resource "aws_iam_role" "example" {
   name = "example"
 
-  assume_role_policy = templatefile("${path.root}/modules/templates/codebuild_role.json", {})
+  assume_role_policy = templatefile("${path.root}/modules/templates/assume_role.json", { service = "codebuild" })
 }
 
 resource "aws_iam_role_policy" "example" {
