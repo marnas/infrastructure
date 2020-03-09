@@ -1,7 +1,7 @@
 resource "aws_s3_bucket" "bucket" {
   bucket = var.bucket_name
   acl    = "public-read"
-  policy = templatefile("${path.module}/templates/policy.json", { bucket_name = var.bucket_name })
+  policy = templatefile("${path.root}/modules/templates/s3_policy.json", { bucket_name = var.bucket_name })
 
   website {
     index_document = "index.html"
