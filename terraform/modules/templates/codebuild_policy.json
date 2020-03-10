@@ -19,7 +19,7 @@
           "s3:Get*",
           "s3:List*"
         ],
-        "Resource": "*"
+        "Resource": "${s3_bucket_arn}"
       }
     ]
   }

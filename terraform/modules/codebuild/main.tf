@@ -7,7 +7,7 @@ resource "aws_iam_role" "codebuild_role" {
 resource "aws_iam_role_policy" "example" {
   role = aws_iam_role.codebuild_role.name
 
-  policy = templatefile("${path.root}/modules/templates/codebuild_policy.json", {})
+  policy = templatefile("${path.root}/modules/templates/codebuild_policy.json", {s3_bucket_arn = var.s3_bucket_arn})
 }
 
 resource "aws_codebuild_project" "example" {
@@ -24,6 +24,11 @@ resource "aws_codebuild_project" "example" {
     compute_type                = "BUILD_GENERAL1_SMALL"
     image                       = "aws/codebuild/standard:1.0"
     type                        = "LINUX_CONTAINER"
+  
+    environment_variable {
+      name  = "S3_BUCKET"
+      value = var.s3_bucket
+    }
   }
 
 #   logs_config {
