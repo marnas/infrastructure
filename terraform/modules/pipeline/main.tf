@@ -5,13 +5,13 @@ resource "aws_s3_bucket" "codepipeline_bucket" {
 }
 
 resource "aws_iam_role" "codepipeline_role" {
-  name = "test-role"
+  name = "${var.pipeline_name}-pipeline"
 
   assume_role_policy = templatefile("${path.root}/modules/templates/assume_role.json", { service = "codepipeline" })
 }
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
-  name = "codepipeline_policy"
+  name = "${var.pipeline_name}-pipeline"
   role = aws_iam_role.codepipeline_role.id
   policy = templatefile("${path.root}/modules/templates/pipeline_policy.json", {resource = aws_s3_bucket.codepipeline_bucket.arn})
 }
@@ -23,7 +23,8 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
 module "codebuild" {
     source = "../codebuild"
 
-    codebuild_name = "santonastaso-project"
+    s3_bucket_arn   = var.s3_bucket_arn
+    codebuild_name  = "${var.pipeline_name}-project"
 }
 
 resource "aws_codepipeline" "codepipeline" {

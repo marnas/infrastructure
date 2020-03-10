@@ -20,6 +20,7 @@ module "pipeline" {
   source        = "./modules/pipeline"
 
   pipeline_name = var.bucket_name
+  s3_bucket_arn = module.s3_bucket.s3_bucket_arn
   origin_org    = var.origin_org
   origin_repo   = var.origin_repo
   origin_branch = var.origin_branch
