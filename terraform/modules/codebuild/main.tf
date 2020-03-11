@@ -1,16 +1,25 @@
 resource "aws_iam_role" "codebuild_role" {
-  name = "example"
+  name = "${codebuild_name}-codebuild"
 
-  assume_role_policy = templatefile("${path.root}/modules/templates/assume_role.json", { service = "codebuild" })
+  assume_role_policy = templatefile(
+    "${path.root}/modules/templates/assume_role.json", {
+      service = "codebuild"
+    }
+  )
 }
 
-resource "aws_iam_role_policy" "example" {
+resource "aws_iam_role_policy" "codebuild_policy" {
   role = aws_iam_role.codebuild_role.name
 
-  policy = templatefile("${path.root}/modules/templates/codebuild_policy.json", {s3_bucket_arn = var.s3_bucket_arn})
+  policy = templatefile(
+    "${path.root}/modules/templates/codebuild_policy.json", {
+      s3_pipeline_arn = var.s3_pipeline_arn,
+      s3_bucket_arn   = var.s3_bucket_arn
+    }
+  )
 }
 
-resource "aws_codebuild_project" "example" {
+resource "aws_codebuild_project" "codebuild" {
   name          = var.codebuild_name
   description   = var.codebuild_desc
   build_timeout = "5"
@@ -40,7 +49,6 @@ resource "aws_codebuild_project" "example" {
 
   source {
     type            = "CODEPIPELINE"
-    git_clone_depth = 1
   }
 
   source_version = "master"

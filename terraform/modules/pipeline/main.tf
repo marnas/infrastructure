@@ -7,13 +7,22 @@ resource "aws_s3_bucket" "codepipeline_bucket" {
 resource "aws_iam_role" "codepipeline_role" {
   name = "${var.pipeline_name}-pipeline"
 
-  assume_role_policy = templatefile("${path.root}/modules/templates/assume_role.json", { service = "codepipeline" })
+  assume_role_policy = templatefile(
+    "${path.root}/modules/templates/assume_role.json", {
+      service = "codepipeline"
+    }
+  )
 }
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
   name = "${var.pipeline_name}-pipeline"
   role = aws_iam_role.codepipeline_role.id
-  policy = templatefile("${path.root}/modules/templates/pipeline_policy.json", {resource = aws_s3_bucket.codepipeline_bucket.arn})
+  policy = templatefile(
+    "${path.root}/modules/templates/pipeline_policy.json", {
+      codepipeline_bucket_arn = aws_s3_bucket.codepipeline_bucket.arn,
+      codebuild_arn           = module.codebuild.codebuild_arn
+    }
+  )
 }
 
 # data "aws_kms_alias" "s3kmskey" {
@@ -25,6 +34,7 @@ module "codebuild" {
 
     s3_bucket_arn   = var.s3_bucket_arn
     s3_bucket       = var.pipeline_name
+    s3_pipeline_arn = aws_s3_bucket.codepipeline_bucket.arn
     codebuild_name  = "${var.pipeline_name}-project"
 }
 

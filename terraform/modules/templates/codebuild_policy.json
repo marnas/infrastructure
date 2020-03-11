@@ -1,26 +1,34 @@
 {
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Effect": "Allow",
-        "Resource": [
-          "*"
-        ],
-        "Action": [
-          "logs:CreateLogGroup",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
-        ]
-      },
-      {
-        "Effect": "Allow",
-        "Action": [
-          "s3:PutObject",
-          "s3:Get*",
-          "s3:List*"
-        ],
-        "Resource": "${s3_bucket_arn}"
-      }
-    ]
-  }
-  
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Resource": [
+        "*"
+      ],
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:Get*",
+        "s3:List*"
+      ],
+      "Resource": "${s3_pipeline_arn}/*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:Get*",
+        "s3:List*",
+        "s3:DeleteObject"
+      ],
+      "Resource": "${s3_bucket_arn}/*"
+    }
+  ]
+}
