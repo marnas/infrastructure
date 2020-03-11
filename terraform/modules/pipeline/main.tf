@@ -8,7 +8,7 @@ resource "aws_iam_role" "codepipeline_role" {
   name = "${var.pipeline_name}-pipeline"
 
   assume_role_policy = templatefile(
-    "${path.root}/modules/templates/assume_role.json", {
+    "${path.root}/../modules/templates/assume_role.json", {
       service = "codepipeline"
     }
   )
@@ -18,7 +18,7 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
   name = "${var.pipeline_name}-pipeline"
   role = aws_iam_role.codepipeline_role.id
   policy = templatefile(
-    "${path.root}/modules/templates/pipeline_policy.json", {
+    "${path.root}/../modules/templates/pipeline_policy.json", {
       codepipeline_bucket_arn = aws_s3_bucket.codepipeline_bucket.arn,
       codebuild_arn           = module.codebuild.codebuild_arn
     }

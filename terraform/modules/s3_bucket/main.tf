@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "bucket" {
   acl    = "public-read"
   force_destroy = true
   policy = templatefile(
-    "${path.root}/modules/templates/s3_policy.json", {
+    "${path.root}/../modules/templates/s3_policy.json", {
       bucket_name = var.bucket_name
     }
   )

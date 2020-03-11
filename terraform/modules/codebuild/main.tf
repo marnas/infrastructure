@@ -1,8 +1,8 @@
 resource "aws_iam_role" "codebuild_role" {
-  name = "${codebuild_name}-codebuild"
+  name = "${var.codebuild_name}-codebuild"
 
   assume_role_policy = templatefile(
-    "${path.root}/modules/templates/assume_role.json", {
+    "${path.root}/../modules/templates/assume_role.json", {
       service = "codebuild"
     }
   )
@@ -12,7 +12,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
   role = aws_iam_role.codebuild_role.name
 
   policy = templatefile(
-    "${path.root}/modules/templates/codebuild_policy.json", {
+    "${path.root}/../modules/templates/codebuild_policy.json", {
       s3_pipeline_arn = var.s3_pipeline_arn,
       s3_bucket_arn   = var.s3_bucket_arn
     }
