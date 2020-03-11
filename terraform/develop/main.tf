@@ -22,9 +22,16 @@ terraform {
 
 # Initialising s3 bucket
 module "s3_bucket" {
-  source        = "../modules/s3_bucket"
+  source            = "../modules/s3_bucket"
 
-  bucket_name   = var.bucket_name
+  bucket_name       = var.bucket_name
+}
+
+module "cloudfront" {
+  source            = "../modules/cloudfront"
+
+  s3_bucket_name    = var.bucket_name
+  s3_origin_domain  = module.s3_bucket.s3_bucket_origin
 }
 
 module "pipeline" {
