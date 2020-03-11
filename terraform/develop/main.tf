@@ -32,6 +32,8 @@ module "cloudfront" {
 
   s3_bucket_name    = var.bucket_name
   s3_origin_domain  = module.s3_bucket.s3_bucket_origin
+  domain_name       = "${var.origin_branch}.${var.origin_repo}"
+  route53_zone      = var.origin_repo
 }
 
 module "pipeline" {
@@ -42,4 +44,13 @@ module "pipeline" {
   origin_org    = var.origin_org
   origin_repo   = var.origin_repo
   origin_branch = var.origin_branch
+}
+
+module "route53" {
+  source            = "../modules/route53"
+
+  domain_name       = var.origin_repo
+  environment       = var.origin_branch
+  cloudfront_domain = module.cloudfront.domain_name
+  cloudfront_zone   = module.cloudfront.hosted_zone_id
 }
