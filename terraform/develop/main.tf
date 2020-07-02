@@ -13,7 +13,7 @@ terraform {
   backend "s3" {
     bucket         = "santonastaso-tfstate"
     # Path in S3 Bucket to locate tfstate file
-    key            = "develop/terraform.tfstate"
+    key            = "master/terraform.tfstate"
     region         = "eu-west-1"
     dynamodb_table = "santonastaso-tfstate-locks"
     encrypt        = true
@@ -32,18 +32,19 @@ module "cloudfront" {
 
   s3_bucket_name    = var.bucket_name
   s3_origin_domain  = module.s3_bucket.s3_bucket_origin
-  domain_name       = "${var.origin_branch}.${var.origin_repo}"
+  domain_name       = var.bucket_name
   route53_zone      = var.origin_repo
 }
 
 module "pipeline" {
-  source        = "../modules/pipeline"
+  source          = "../modules/pipeline"
 
-  pipeline_name = var.bucket_name
-  s3_bucket_arn = module.s3_bucket.s3_bucket_arn
-  origin_org    = var.origin_org
-  origin_repo   = var.origin_repo
-  origin_branch = var.origin_branch
+  pipeline_name   = var.pipeline_name
+  s3_bucket_name  = var.bucket_name
+  s3_bucket_arn   = module.s3_bucket.s3_bucket_arn
+  origin_org      = var.origin_org
+  origin_repo     = var.origin_repo
+  origin_branch   = var.origin_branch
 }
 
 module "route53" {

@@ -33,7 +33,7 @@ module "codebuild" {
     source = "../codebuild"
 
     s3_bucket_arn   = var.s3_bucket_arn
-    s3_bucket       = var.pipeline_name
+    s3_bucket       = var.s3_bucket_name
     s3_pipeline_arn = aws_s3_bucket.codepipeline_bucket.arn
     codebuild_name  = "${var.pipeline_name}-project"
 }
