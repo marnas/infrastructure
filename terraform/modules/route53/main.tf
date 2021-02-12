@@ -5,7 +5,7 @@ data "aws_route53_zone" "route_zone" {
 
 resource "aws_route53_record" "www" {
   zone_id = data.aws_route53_zone.route_zone.zone_id
-  name    = "${var.environment}.${var.domain_name}"
+  name    = var.environment == "master" ? var.domain_name : "${var.environment}.${var.domain_name}"
   type    = "A"
 
   alias {
