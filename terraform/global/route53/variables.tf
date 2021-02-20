@@ -1,1 +1,0 @@
-variable "zone_name" { default = "santonastaso.me" }
