@@ -39,7 +39,7 @@ module "cloudfront" {
 module "pipeline" {
   source          = "../modules/pipeline"
 
-  pipeline_name   = var.pipeline_name
+  pipeline_name   = "${var.project}-${var.origin_branch}"
   s3_bucket_name  = var.bucket_name
   s3_bucket_arn   = module.s3_bucket.s3_bucket_arn
   origin_org      = var.origin_org
